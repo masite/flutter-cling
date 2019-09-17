@@ -1,0 +1,37 @@
+name: flutter_app
+description: A new Flutter application.
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_dlan:
+    path: plugins/flutter_dlan
+
+  flutter_plugin:
+    path: plugins/flutter_plugin
+
+
+  #黏贴headerview
+  sticky_headers: ^0.1.8
+
+#  #权限
+  simple_permissions: ^0.1.9
+
+  path_provider: ^0.4.1
+
+  cupertino_icons: ^0.1.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
