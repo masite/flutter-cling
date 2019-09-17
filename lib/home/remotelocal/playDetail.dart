@@ -31,126 +31,123 @@ class _PlayDetailPageState extends State<PlayDetailPage> {
           child: SizedBox(
             width: 200.0,
             height: 200.0,
-            child: Container(
-              color: Colors.white,
-              child: Stack(
-                children: <Widget>[
-                  GestureDetector(
-                    onTap: () {
-                      print("-----top");
-                    },
-                    child: ClipPath(
-                      child: Align(
-                        alignment: Alignment(-1, -1),
-                        child: Container(
-                          width: 200,
-                          height: 100,
-                          color: Colors.red,
-                          child: Align(
-                            alignment: Alignment(0, -0.65),
-                            child: Image.asset(
-                              "assets/images/yinliangda.png",
-                              height: 20,
-                            ),
+            child: Stack(
+              children: <Widget>[
+                GestureDetector(
+                  onTap: () {
+                    print("-----top");
+                  },
+                  child: ClipPath(
+                    child: Align(
+                      alignment: Alignment(-1, -1),
+                      child: Container(
+                        width: 200,
+                        height: 100,
+                        color: Colors.red,
+                        child: Align(
+                          alignment: Alignment(0, -0.65),
+                          child: Image.asset(
+                            "assets/images/yinliangda.png",
+                            height: 20,
                           ),
                         ),
                       ),
-                      clipper: TopPath(),
                     ),
+                    clipper: TopPath(),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      print("-----right");
-                    },
-                    child: ClipPath(
-                      child: Align(
-                        alignment: Alignment(1, -1),
-                        child: Container(
-                          width: 100,
-                          height: 200,
-                          color: Colors.orange,
-                          child: Align(
-                            alignment: Alignment(0.65, 0),
-                            child: Image.asset(
-                              "assets/images/xiayiqu.png",
-                              width: 20,
-                            ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print("-----right");
+                  },
+                  child: ClipPath(
+                    child: Align(
+                      alignment: Alignment(1, -1),
+                      child: Container(
+                        width: 100,
+                        height: 200,
+                        color: Colors.orange,
+                        child: Align(
+                          alignment: Alignment(0.65, 0),
+                          child: Image.asset(
+                            "assets/images/xiayiqu.png",
+                            width: 20,
                           ),
                         ),
                       ),
-                      clipper: RightPath(),
                     ),
+                    clipper: RightPath(),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      print("----left");
-                    },
-                    child: ClipPath(
-                      child: Align(
-                        alignment: Alignment(-1, 1),
-                        child: Container(
-                          width: 100,
-                          height: 200,
-                          color: Colors.yellow,
-                          child: Align(
-                            alignment: Alignment(-0.65, 0),
-                            child: Image.asset(
-                              "assets/images/shangyiqu.png",
-                              width: 20,
-                            ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print("----left");
+                  },
+                  child: ClipPath(
+                    child: Align(
+                      alignment: Alignment(-1, 1),
+                      child: Container(
+                        width: 100,
+                        height: 200,
+                        color: Colors.yellow,
+                        child: Align(
+                          alignment: Alignment(-0.65, 0),
+                          child: Image.asset(
+                            "assets/images/shangyiqu.png",
+                            width: 20,
                           ),
                         ),
                       ),
-                      clipper: LeftPath(),
                     ),
+                    clipper: LeftPath(),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      print("------bottom点击了");
-                    },
-                    child: ClipPath(
-                      child: Align(
-                        alignment: Alignment(1, 1),
-                        child: Container(
-                          width: 200,
-                          height: 100,
-                          color: Colors.green,
-                          child: Align(
-                            alignment: Alignment(0, 0.65),
-                            child: Image.asset(
-                              "assets/images/yinliangxiao.png",
-                              height: 20,
-                            ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print("------bottom点击了");
+                  },
+                  child: ClipPath(
+                    child: Align(
+                      alignment: Alignment(1, 1),
+                      child: Container(
+                        width: 200,
+                        height: 100,
+                        color: Colors.green,
+                        child: Align(
+                          alignment: Alignment(0, 0.65),
+                          child: Image.asset(
+                            "assets/images/yinliangxiao.png",
+                            height: 20,
                           ),
                         ),
                       ),
-                      clipper: BottomPath(),
                     ),
+                    clipper: BottomPath(),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      print("---- 中间区域");
-                    },
-                    child: Center(
-                      child: ClipOval(
-                        child: SizedBox(
-                          width: 110,
-                          height: 110,
-                          child: Align(
-                            alignment: Alignment(0, 0),
-                            child: Container(
-                              color: Colors.white,
-                              width: 110,
-                              height: 110,
-                              child: Image.asset("assets/images/playing.png"),
-                            ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    print("---- 中间区域");
+                  },
+                  child: Center(
+                    child: ClipOval(
+                      child: SizedBox(
+                        width: 110,
+                        height: 110,
+                        child: Align(
+                          alignment: Alignment(0, 0),
+                          child: Container(
+                            color: Colors.white,
+                            width: 110,
+                            height: 110,
+                            child: Image.asset("assets/images/playing.png"),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
