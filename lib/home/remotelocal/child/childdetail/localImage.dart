@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/home/remotelocal/playDetail.dart';
 import 'package:flutter_app/home/routeani/SlideRightRoute.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_plugin/flutter_plugin.dart';
 
 class LocalImagePage extends StatefulWidget {
@@ -11,10 +12,20 @@ class LocalImagePage extends StatefulWidget {
 
 class _LocalImagePageState extends State<LocalImagePage> {
   List<dynamic> localImages = [];
+  List<dynamic> localImagesShow = [];
+
+  ScrollController _scrollController = new ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        print("----------- 滑动到底部");
+        updateImages();
+      }
+    });
     //获取本地文件--图片
     getImageDate();
   }
@@ -49,12 +60,13 @@ class _LocalImagePageState extends State<LocalImagePage> {
     return Padding(
       padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
       child: GridView.builder(
+        controller: _scrollController,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1,
           crossAxisSpacing: 20,
         ),
-        itemCount: 20,
+        itemCount: localImages.length,
         itemBuilder: (context, index) {
           return GestureDetector(
             onTap: (){
@@ -82,44 +94,51 @@ class _LocalImagePageState extends State<LocalImagePage> {
   }
 
   Widget buildImage(int index) {
-    if (localImages.length > 0) {
-      String path = localImages[index]["resources"][0]["value"];
-      List<String> list = path.split("/storage");
-      String localpath = "/storage" + list[1];
+    String path = localImages[index]["resources"][0]["value"];
+    List<String> list = path.split("/storage");
+    String localpath = "/storage" + list[1];
 
-      String id = localImages[index]["id"];
-      String title = localImages[index]["title"];
-      String replace = localpath.replaceAll(id, title);
+    String id = localImages[index]["id"];
+    String title = localImages[index]["title"];
+    String replace = localpath.replaceAll(id, title);
 
-      return Expanded(
-          child: ClipRRect(
-        borderRadius: BorderRadius.circular(4),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            minHeight: 150,
-            minWidth: 150
+    return Expanded(
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+                minHeight: 150,
+                minWidth: 150
+            ),
+            child: Image.file(
+              new File(localImages.length == 0 ? "" : replace),
+              fit: BoxFit.fitWidth,
+            ),
           ),
-          child: Image.file(
-            new File(localImages.length == 0 ? "" : replace),
-            fit: BoxFit.fitWidth,
-          ),
-        ),
-      ));
-    } else {
-      return Expanded(child: Image.asset("assets/images/logo.png"));
-    }
+        ));
   }
 
   getImageDate() async {
     List<dynamic> d = await FlutterPlugin.localImages;
-    setState(() {
-      localImages = d;
-      print("---------getImageDate-----------${localImages.length}");
-    });
+    localImagesShow = d;
+    updateImages();
   }
 
-  _navigateToPlayDetailPage(BuildContext context,int index) async {
+  void updateImages() async {
+    int end = localImagesShow.length - localImages.length;
+    if (end == 0) {
+      return;
+    }
+    List<dynamic> list = localImagesShow.sublist(localImages.length,
+        end < 10 ? localImages.length + end : localImages.length + 10);
 
+    localImages.addAll(list);
+    print(
+        "---------list-----------${localImagesShow.length}-----${localImages.length}---${list.length}");
+    setState(() {});
+  }
+
+  _navigateToPlayDetailPage(BuildContext context, int index) async {
     var argument = {
       'creator': localImages[index]["creator"],
       'title': localImages[index]["title"],
@@ -128,7 +147,51 @@ class _LocalImagePageState extends State<LocalImagePage> {
       'resources': localImages[index]["resources"][0],
     };
 
-    Navigator.push(context, SlideRightRoute(page: PlayDetailPage(argument),));
+    Navigator.push(
+        context,
+        SlideRightRoute(
+          page: PlayDetailPage(argument),
+        ));
+  }
 
+  // 1. compress file and get a List<int>
+  Future<List<int>> testCompressFile(File file) async {
+    var result = await FlutterImageCompress.compressWithFile(
+      file.absolute.path,
+      minWidth: 2300,
+      minHeight: 1500,
+      quality: 94,
+      rotate: 90,
+    );
+    print(file.lengthSync());
+    print(result.length);
+    return result;
+  }
+
+  // 2. compress file and get file.
+  Future<File> testCompressAndGetFile(File file, String targetPath) async {
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 88,
+      rotate: 180,
+    );
+
+    print(file.lengthSync());
+    print(result.lengthSync());
+
+    return result;
+  }
+
+// 2. compress file and get file.
+  Future<File> testCompressAndGetFile2(
+      String oldPath, String targetPath) async {
+    var result = await FlutterImageCompress.compressAndGetFile(
+      oldPath,
+      targetPath,
+      quality: 88,
+      rotate: 0,
+    );
+    return result;
   }
 }
