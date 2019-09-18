@@ -69,8 +69,8 @@ class _LocalImagePageState extends State<LocalImagePage> {
         itemCount: localImages.length,
         itemBuilder: (context, index) {
           return GestureDetector(
-            onTap: (){
-              _navigateToPlayDetailPage(context,index);
+            onTap: () {
+              _navigateToPlayDetailPage(context, index);
 //              FlutterPlugin.playLocalSource(argument);
             },
             child: Column(
@@ -102,21 +102,29 @@ class _LocalImagePageState extends State<LocalImagePage> {
     String title = localImages[index]["title"];
     String replace = localpath.replaceAll(id, title);
 
+    print("------->>> $replace");
     return Expanded(
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-                minHeight: 150,
-                minWidth: 150
-            ),
-            child: Image.file(
-              new File(localImages.length == 0 ? "" : replace),
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-        ));
+      borderRadius: BorderRadius.circular(4),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(minHeight: 150, minWidth: 150),
+        child: FutureBuilder(
+            future: testCompressAndGetFile2(replace, id),
+            builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+              return snapshot.data != null
+                  ? new Image.file(snapshot.data, fit: BoxFit.fitWidth)
+                  : new Container(
+                      color: Colors.blue,
+                    );
+            }),
+      ),
+    ));
   }
+
+  //Image.file(
+  //              new File(replace),
+  //              fit: BoxFit.fitWidth,
+  //            )
 
   getImageDate() async {
     List<dynamic> d = await FlutterPlugin.localImages;
@@ -184,12 +192,17 @@ class _LocalImagePageState extends State<LocalImagePage> {
   }
 
 // 2. compress file and get file.
-  Future<File> testCompressAndGetFile2(
-      String oldPath, String targetPath) async {
+  Future<File> testCompressAndGetFile2(String oldPath, String name) async {
+    String dir = "/storage/emulated/0/1/$name.png";
+
+    File file = new File(dir);
+    if (file.existsSync()) {
+      return file;
+    }
     var result = await FlutterImageCompress.compressAndGetFile(
       oldPath,
-      targetPath,
-      quality: 88,
+      dir,
+      quality: 64,
       rotate: 0,
     );
     return result;
